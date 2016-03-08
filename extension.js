@@ -58,10 +58,6 @@ function onTrayIconAdded(o, icon, role, delay) {
     let trayPosition = settings.get_string('tray-pos');
     let trayOrder = settings.get_int('tray-order');
 
-    let scaleFactor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
-    icon.set_pivot_point(0.5, 0.5);
-    icon.set_scale(scaleFactor, scaleFactor);
-
     let iconContainer = new St.Button({child: icon, visible: false});
     applyPadding(iconContainer);
 
@@ -238,7 +234,10 @@ function applyOpacity(icon) {
 
 function applySize(icon) {
     let iconSize = settings.get_int('icon-size');
-    icon.set_size(iconSize, iconSize)
+    let scaleFactor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
+    Clutter.Actor.prototype.set_pivot_point.call(icon, 0.5, 0.5);
+    Clutter.Actor.prototype.set_size.call(icon, iconSize, iconSize);
+    Clutter.Actor.prototype.set_scale.call(icon, scaleFactor, scaleFactor);
 }
 
 function applyPadding(iconContainer) {
